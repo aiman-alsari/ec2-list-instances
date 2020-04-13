@@ -88,7 +88,7 @@ public class EC2InstanceList {
         }
         Comparator<EC2Instance> c = EC2Instance.COMPARATOR_LOOKUP.get(field);
         if (c == null){
-            throw new IllegalArgumentException(field);
+            throw new EC2SortError("\"" + field + "\"" + "is not a supported searchField, please use one of: "+ EC2Instance.COMPARATOR_LOOKUP.keySet());
         }
         instances.sort(c);
         if(!ascending){

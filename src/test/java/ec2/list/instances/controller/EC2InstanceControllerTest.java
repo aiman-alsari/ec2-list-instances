@@ -11,21 +11,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Test;
+
 import ec2.list.instances.model.EC2Instance;
 import ec2.list.instances.model.EC2InstanceList;
 import ec2.list.instances.service.EC2InstanceService;
-
-import org.junit.jupiter.api.Test;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MicronautTest;
 import io.micronaut.test.annotation.MockBean;
-import software.amazon.awssdk.awscore.exception.AwsErrorDetails;
-import software.amazon.awssdk.awscore.exception.AwsServiceException;
-import software.amazon.awssdk.services.ec2.model.Ec2Exception;
 
 @MicronautTest
 public class EC2InstanceControllerTest {
@@ -63,22 +59,6 @@ public class EC2InstanceControllerTest {
                                                   .header("aws-access-key-secret", "test-key");
         client.toBlocking().retrieve(request3, EC2InstanceList.class);
 
-    }
-
-    @Test
-    void testGetInstancesThrows401WithBadCreds(){
-        AwsServiceException ec2Exception = Ec2Exception.builder().awsErrorDetails(AwsErrorDetails.builder().errorCode("401").build()).build();
-        when( service.getInstances("bad-test-key-id", "test-key", "us-east-2", null, null) )
-             .thenThrow(ec2Exception);
-
-        HttpRequest<Object> request = HttpRequest.GET("/instances/us-east-2")
-                                                 .header("aws-access-key-id", "bad-test-key-id")
-                                                 .header("aws-access-key-secret", "test-key");
-        HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () ->
-            client.toBlocking().retrieve(request, EC2InstanceList.class)
-        );
-        // assertEquals("Required Header [aws-access-key-id] not specified", e.getMessage());
-        assertEquals(401, e.getResponse().getStatus().getCode());
     }
 
     @Test

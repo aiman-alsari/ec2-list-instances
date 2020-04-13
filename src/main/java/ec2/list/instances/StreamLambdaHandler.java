@@ -1,10 +1,14 @@
 package ec2.list.instances;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
-import com.amazonaws.serverless.proxy.model.*;
-import com.amazonaws.services.lambda.runtime.*;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+
 import io.micronaut.function.aws.proxy.MicronautLambdaContainerHandler;
-import java.io.*;
 
 public class StreamLambdaHandler implements RequestStreamHandler {
     private static MicronautLambdaContainerHandler handler; // <1>

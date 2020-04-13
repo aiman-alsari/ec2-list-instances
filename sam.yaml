@@ -24,6 +24,6 @@ Resources:
 Outputs:
   Ec2ListInstancesApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/instances/'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/instances/'
     Export:
       Name: Ec2ListInstancesApi
