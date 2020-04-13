@@ -3,25 +3,40 @@
 ## Local Usage
 
 Install the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+
 e.g. with homebrew:
-```brew install aws/tap/aws-sam-cli```
+```
+brew install aws/tap/aws-sam-cli
+```
 Compile and copy the exploded jars to run locally
-```./gradlew build && ./gradlew exploded```
+```
+./gradlew build && ./gradlew exploded
+```
 Start the API server using SAM
-```sam local start-api --template sam-local.yaml```
+```
+sam local start-api --template sam-local.yaml
+```
 
 You can now test the API using curl at localhost:3000
-```curl -H 'aws-access-key-id: YOUR_ACCESS_KEY_ID' -H 'aws-access-key-secret: YOUR_ACCESS_KEY_SECRET' http://localhost:3000/instances/us-east-2/?sortField=publicIP | python -m json.tool```
+```
+curl -H 'aws-access-key-id: YOUR_ACCESS_KEY_ID' -H 'aws-access-key-secret: YOUR_ACCESS_KEY_SECRET' http://localhost:3000/instances/us-east-2/?sortField=publicIP | python -m json.tool
+```
 
 ## Deploying to AWS Lambda
 
 1. Create an S3 bucket to store the artifacts for deployment.
 2. Package and upload the API
-```aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket YOUR_S3_BUCKET_NAME```
+```
+aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket YOUR_S3_BUCKET_NAME
+```
 3. Using the same region as your S3 Bucket, deploy the API
-```aws cloudformation deploy --template-file output-sam.yaml --stack-name EC2ListInstances --capabilities CAPABILITY_IAM --region=YOUR_REGION```
+```
+aws cloudformation deploy --template-file output-sam.yaml --stack-name EC2ListInstances --capabilities CAPABILITY_IAM --region=YOUR_REGION
+```
 4. Describe the stack to see the new URL of your API
-```aws cloudformation describe-stacks --stack-name EC2ListInstances --region=YOUR_REGION```
+```
+aws cloudformation describe-stacks --stack-name EC2ListInstances --region=YOUR_REGION
+```
 
 ## Improvements
 
