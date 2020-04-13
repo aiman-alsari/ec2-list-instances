@@ -1,0 +1,72 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "application"
+    id "net.ltgt.apt-eclipse" version "0.21"
+}
+
+
+
+version "0.1"
+group "ec2.list.instances"
+
+repositories {
+    mavenCentral()
+    maven { url "https://jcenter.bintray.com" }
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly 
+}
+
+dependencies {
+    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    developmentOnly "io.micronaut:micronaut-http-server-netty"
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut.aws:micronaut-function-aws-api-proxy"
+    runtimeOnly "org.apache.logging.log4j:log4j-core:2.8.2"
+    runtimeOnly "org.apache.logging.log4j:log4j-api:2.8.2"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.8.2"
+    runtimeOnly "com.amazonaws:aws-lambda-java-log4j2:1.1.0"
+    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+}
+
+test.classpath += configurations.developmentOnly
+
+mainClassName = "ec2.list.instances.Application"
+// use JUnit 5 platform
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+    options.compilerArgs.add('-parameters')
+}
+task buildZip(type: Zip) {
+    from sourceSets.main.output
+    into('lib') {
+        from configurations.compileClasspath
+        from configurations.runtimeClasspath
+    }
+}
+shadowJar.dependsOn buildZip

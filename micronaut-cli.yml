@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: ec2.list.instances
+---
+testFramework: junit
+sourceLanguage: java
