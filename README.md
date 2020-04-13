@@ -72,6 +72,7 @@ For a single result with no further results.
             "state": "running",
             "type": "t2.micro"
         }
+    ]
 }
 ```
 
