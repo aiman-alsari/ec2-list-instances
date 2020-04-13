@@ -16,15 +16,17 @@ repositories {
 
 configurations {
     // for dependencies that are needed for development only
-    developmentOnly 
+    developmentOnly
 }
 
 dependencies {
     annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
-    developmentOnly "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut:micronaut-http-server-netty"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation platform('software.amazon.awssdk:bom:2.5.29')
+    implementation 'software.amazon.awssdk:ec2'
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
@@ -39,6 +41,7 @@ dependencies {
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
+    testCompile "org.mockito:mockito-junit-jupiter:2.22.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
@@ -69,4 +72,16 @@ task buildZip(type: Zip) {
         from configurations.runtimeClasspath
     }
 }
+
+task exploded(type: Copy) {
+	from sourceSets.main.output
+	into "build/exploded"
+
+
+	into('lib') {
+		from configurations.compileClasspath
+		from configurations.runtimeClasspath
+	}
+}
+
 shadowJar.dependsOn buildZip

@@ -10,8 +10,8 @@ Resources:
     Properties:
       Handler: ec2.list.instances.StreamLambdaHandler::handleRequest
       Runtime: java8
-      CodeUri: build/distributions/ec2-list-instances-0.1.zip
-      MemorySize: 512
+      CodeUri: build/exploded
+      MemorySize: 320
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 15
       Events:
@@ -24,6 +24,6 @@ Resources:
 Outputs:
   Ec2ListInstancesApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/instances/'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping'
     Export:
       Name: Ec2ListInstancesApi
