@@ -156,3 +156,4 @@ As this was supposed to be a quick technical exercise, there are some shortcuts 
 * Make the sort more intelligent, currently does alphabetical sort only which is a bit dumb for IP addresses
 * Use GraalVM to generate a native image thereby massively reducing the cold start time, unfortunately the [AWS SDK relies heavily on reflection etc](https://github.com/aws/aws-sdk-java/issues/2037) and it is not currently possible.
 * Find a way to sort the full result set then paginate them, rather than the current behaviour which sorts just the current page. This is due to the AWS SDK not providing a sort option, so we would have to fetch all data, store it, sort it, then re-implement pagination.
+
